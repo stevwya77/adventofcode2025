@@ -1,5 +1,4 @@
-filepath = "turns.txt"
-
+PUZZLE_INPUT = "turns.txt"
 
 '''
 Extract rotations from provided document in txt file.
@@ -11,9 +10,9 @@ def read_rotations(filepath):
         return stripped
 
 '''
-Update the dial value indicated by direction
-and assigned turn value per step. Any value beyond
-100 is disregarded.
+Calculate step from initial position to next by indicated rotation
+direction and value. Returned value measures distance from 100 to 
+ensure position remains within bounds.
 '''
 def turn(step, dial_pos):
     # separate direction and turn value
@@ -30,16 +29,24 @@ def turn(step, dial_pos):
     return dial_pos
 
 '''
-Assign dial position per turn and stores rotation 
-count with result of zero.
+Assign dial position per turn and returns rotation counts 
+resulting in zero.
 '''
 def move_dial(rotations):
+    # initialize dial at 50
     dial_pos = 50
     count = 0
     for step in rotations:
+        # update position per turn
         dial_pos = turn(step, dial_pos)
+        # count turn results pointing at 0
         if dial_pos == 0:
             count += 1
     return count
 
-print(move_dial(read_rotations(filepath)))
+def main():
+    door_pwd = move_dial(read_rotations(PUZZLE_INPUT))
+    print(f'Door Password: {door_pwd}')
+
+if __name__ == '__main__':
+    main()
