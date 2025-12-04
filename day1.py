@@ -1,24 +1,38 @@
 filepath = "turns.txt"
 
-def turn(step, dial_pos):
-    turn_val = int(step[1:])
-    if step[0] == 'L':
-        dial_pos = dial_pos - turn_val
-        if dial_pos < 0:
-            if len(str(dial_pos)) > 2:
-                dial_pos = (dial_pos % 100)
-    if step[0] == 'R':
-        dial_pos = dial_pos + turn_val
-        if dial_pos > 99:
-            dial_pos = dial_pos % 100
-    return dial_pos
 
+'''
+Extract rotations from provided document in txt file.
+'''
 def read_rotations(filepath):
     with open(filepath, 'r') as f:
         lines = f.readlines()
         stripped = [line.strip() for line in lines]
         return stripped
 
+'''
+Update the dial value indicated by direction
+and assigned turn value per step. Any value beyond
+100 is disregarded.
+'''
+def turn(step, dial_pos):
+    # separate direction and turn value
+    direction = step[0]
+    turn_val = int(step[1:])
+    # left, decrease dial value and reset
+    if direction == 'L':
+        dial_pos = dial_pos - turn_val
+        dial_pos = dial_pos % 100
+    # when right, increase dial value and reset
+    if direction == 'R':
+        dial_pos = dial_pos + turn_val
+        dial_pos = dial_pos % 100
+    return dial_pos
+
+'''
+Assign dial position per turn and stores rotation 
+count with result of zero.
+'''
 def move_dial(rotations):
     dial_pos = 50
     count = 0
