@@ -9,9 +9,7 @@ def turn(step, dial_pos):
                 dial_pos = (dial_pos % 100)
     if step[0] == 'R':
         dial_pos = dial_pos + turn_val
-        if dial_pos == 100:
-            dial_pos = 0
-        if dial_pos > 100:
+        if dial_pos > 99:
             dial_pos = dial_pos % 100
     return dial_pos
 
