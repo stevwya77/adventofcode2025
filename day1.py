@@ -15,18 +15,24 @@ direction and value. Returned value measures distance from 100 to
 ensure position remains within bounds.
 '''
 def turn(step, dial_pos):
+    curr_count = 0
     # separate direction and turn value
     direction = step[0]
     turn_val = int(step[1:])
-    # left, decrease dial value and reset
+
+    # left, decrease dial value
     if direction == 'L':
         dial_pos = dial_pos - turn_val
-        dial_pos = dial_pos % 100
-    # when right, increase dial value and reset
+        if dial_pos < 1 and abs(dial_pos) != turn_val:
+            curr_count += 1
+        curr_count += (abs(dial_pos) // 100)
+        
+    # when right, increase dial value
     if direction == 'R':
         dial_pos = dial_pos + turn_val
-        dial_pos = dial_pos % 100
-    return dial_pos
+        curr_count += dial_pos // 100
+    dial_pos = dial_pos % 100
+    return dial_pos, curr_count
 
 '''
 Assign dial position per turn and returns rotation counts 
@@ -37,11 +43,10 @@ def move_dial(rotations):
     dial_pos = 50
     count = 0
     for step in rotations:
+        step_count = 0
         # update position per turn
-        dial_pos = turn(step, dial_pos)
-        # count turn results pointing at 0
-        if dial_pos == 0:
-            count += 1
+        dial_pos, step_count = turn(step, dial_pos)
+        count += step_count
     return count
 
 def main():
